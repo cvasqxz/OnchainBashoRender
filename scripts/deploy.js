@@ -7,7 +7,7 @@ async function main() {
   await render.deployed();
 
   tokenURI = await render.tokenURI();
-  console.log("tokenURI:", tokenURI);
+  console.log(tokenURI);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
