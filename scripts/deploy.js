@@ -1,8 +1,6 @@
 const hre = require("hardhat");
 
 async function main() {
-  const mintPrice = { value: ethers.utils.parseEther("5") };
-
   const contract = await hre.ethers.getContractFactory("OnchainBashoRender");
   const render = await contract.deploy();
 
