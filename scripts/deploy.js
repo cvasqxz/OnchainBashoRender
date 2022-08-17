@@ -6,8 +6,13 @@ async function main() {
 
   await render.deployed();
 
-  tokenURI = await render.tokenURI();
+  await render.addAbasho(
+    ethers.utils.toUtf8Bytes("0000000000000000000000000000000000000000011110000000000011111100000000001222210000000000042421100000000002222210001110000266211001242000255550000122600000555000005555200033200000255000003330000055500000404000002020000000000000000000000000000000000000000000"),
+    "base")
+
+  tokenURI = await render.tokenURI(0);
   console.log(tokenURI);
+
 }
 
 // We recommend this pattern to be able to use async/await everywhere
