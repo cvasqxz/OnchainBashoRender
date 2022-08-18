@@ -10,14 +10,14 @@ contract OnchainBashoRender is Ownable {
     uint8 private abashoIndex = 0;
     mapping(uint8 => bytes) private abashos;
     mapping(uint8 => string) private abashoNames;
-    mapping(uint8 => bytes3) private abashoPalettes;
 
     function tokenURI(uint8 index) public view virtual returns (string memory) {
         bytes memory out = abi.encodePacked('<svg xmlns="http://www.w3.org/2000/svg" witdh="640" height="640" viewBox="0 0 16 16">');
+        bytes memory abasho = abashos[index];
 
-        for (uint8 y = 0; y < 16; y++) {
-            for (uint8 x = 0; x < 16; x++) {
-                out = abi.encodePacked(out, '<rect x="', str(x), '" y="', str(y), '" width="1" height="1" fill="', rgb(x, y, index), '"/>');
+        for (uint y = 0; y < 16; y++) {
+            for (uint x = 0; x < 16; x++) {
+                out = abi.encodePacked(out, '<rect x="', str(x), '" y="', str(y), '" width="1" height="1" fill="', rgb(x, y, abasho), '"/>');
             }
         }
 
@@ -31,21 +31,21 @@ contract OnchainBashoRender is Ownable {
         abashoIndex++;
     }
 
-    function rgb(uint8 x, uint8 y, uint8 index) internal view returns (bytes memory) {
-        require(index < abashoIndex, "nobasho");
+    function rgb(uint x, uint y, bytes memory abasho) internal pure returns (bytes memory) {
+        uint pos = 48*y + 3*x;
+        uint s = 32 - (x+y);
 
-        bytes memory abasho = abashos[index];
-        uint8 point = uint8(abasho[16*y + x]) - 48;
-
-        return abi.encodePacked('rgb(', str((x+y)*2 + point*10), ',', str((x+y)*2 + point*10), ',', str((x+y)*2 + point*10), ')');
+        return abi.encodePacked('rgb(', 
+            str(s + uint8(abasho[pos])), ',', str(s + uint8(abasho[pos+1])), ',', str(s + uint8(abasho[pos+2])), 
+        ')');
     }
 
-    function str(uint8 value) internal pure returns (bytes memory) {
+    function str(uint value) internal pure returns (bytes memory) {
         if (value == 0) {
             return "0";
         }
-        uint8 temp = value;
-        uint8 digits;
+        uint temp = value;
+        uint digits;
         while (temp != 0) {
             digits++;
             temp /= 10;
