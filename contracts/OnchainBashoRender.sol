@@ -33,7 +33,7 @@ contract OnchainBashoRender is Ownable {
 
     function rgb(uint x, uint y, bytes memory abasho) internal pure returns (bytes memory) {
         uint pos = 48*y + 3*x;
-        uint s = 32 - (x+y);
+        uint s = 16 - (x+y)/2;
 
         return abi.encodePacked('rgb(', 
             str(s + uint8(abasho[pos])), ',', str(s + uint8(abasho[pos+1])), ',', str(s + uint8(abasho[pos+2])), 
